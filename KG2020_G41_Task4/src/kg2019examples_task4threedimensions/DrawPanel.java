@@ -15,31 +15,33 @@ import kg2019examples_task4threedimensions.math.Vector3;
 import kg2019examples_task4threedimensions.screen.ScreenConverter;
 import kg2019examples_task4threedimensions.third.Camera;
 import kg2019examples_task4threedimensions.third.Scene;
-import models.FunctionSpin;
+import models.FactoryUtil.FunctionFactory;
+import models.FunctionSpinModels.FunctionSpin1;
 
 /**
  *
  * @author Alexey
  */
-public class DrawPanel extends JPanel
-        implements CameraController.RepaintListener {
+public class DrawPanel extends JPanel implements CameraController.RepaintListener {
     private Scene scene;
     private ScreenConverter sc;
     private Camera cam;
     private CameraController camController;
+    private int curFunc = 1;
+    private FunctionFactory factory = new FunctionFactory();
+    private Vector3 STX= new Vector3(-2f, -2f, 0f);
+    private Vector3 ENDX = new Vector3(2f, 2f, 0f);
     
     public DrawPanel() {
         super();
+        factory.setT(curFunc);
         sc = new ScreenConverter(-1, 1, 2, 2, 1, 1);
         cam = new Camera();
         camController = new CameraController(cam, sc);
         scene = new Scene(Color.WHITE.getRGB());
         scene.showAxes();
 
-        scene.getModelsList().add(new FunctionSpin(
-                new Vector3(-2f, -2f, 0f),
-                new Vector3(2f, 2f, 0f)
-        ));
+        scene.getModelsList().add(factory.createFunction(STX, ENDX));
         
         camController.addRepaintListener(this);
         addMouseListener(camController);
@@ -49,6 +51,9 @@ public class DrawPanel extends JPanel
     
     @Override
     public void paint(Graphics g) {
+        factory.setT(curFunc);
+        scene.getModelsList().remove(0);
+        scene.getModelsList().add(factory.createFunction(STX, ENDX));
         sc.setScreenSize(getWidth(), getHeight());
         BufferedImage bi = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D graphics = (Graphics2D)bi.getGraphics();
@@ -61,5 +66,17 @@ public class DrawPanel extends JPanel
     @Override
     public void shouldRepaint() {
         repaint();
+    }
+
+    public void setCurFunc(int curFunc) {
+        this.curFunc = curFunc;
+    }
+
+    public int getCurFunc() {
+        return curFunc;
+    }
+
+    public CameraController getCamController() {
+        return camController;
     }
 }
