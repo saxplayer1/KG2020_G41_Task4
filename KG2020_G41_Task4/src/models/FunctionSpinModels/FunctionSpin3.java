@@ -20,7 +20,7 @@ public class FunctionSpin3 implements IModel, IFunctionSpin{
 
     @Override
     public float countZ(float x, float y) {
-        return x*x*x*x + y*y*y*y*(x*x + y*y);
+        return (float) (Math.pow(Math.E, Math.sin(x * 3)) + Math.cos(y * y));
     }
 
     @Override
