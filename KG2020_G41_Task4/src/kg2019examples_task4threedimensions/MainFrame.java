@@ -16,12 +16,19 @@ public class MainFrame extends JFrame{
     private JButton switchAxisButton;
     private boolean rotating = false;
     private Matrix4Factories.Axis chosenAxis = Matrix4Factories.Axis.X;
+    private Timer timer;
 
     public MainFrame() {
         setSize(1000, 1000);
         setContentPane(panel1);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
+        timer = new Timer(40, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                rotate();
+            }
+        });
 
         nextFuncButton.addActionListener(new ActionListener() {
             @Override
@@ -52,16 +59,12 @@ public class MainFrame extends JFrame{
         rotateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int period = Integer.parseInt(rotationPeriodTF.getText());
-                rotating = !rotating;
-                 while (rotating) {
-                    mainPanel.getCamController().getCamera().modifyRotate(Matrix4Factories.rotationXYZ(Math.PI * period / 400, chosenAxis));
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException interruptedException) {
-                        interruptedException.printStackTrace();
-                    }
-                     repaint();
+                if (timer.isRunning()) {
+                    timer.stop();
+                    rotateButton.setText("Rotate!");
+                } else {
+                    timer.start();
+                    rotateButton.setText("Stop!");
                 }
             }
         });
@@ -88,5 +91,11 @@ public class MainFrame extends JFrame{
                 }
             }
         });
+    }
+
+    private void rotate() {
+        int period = Integer.parseInt(rotationPeriodTF.getText());
+        mainPanel.getCamController().getCamera().modifyRotate(Matrix4Factories.rotationXYZ(Math.PI * period / 400, chosenAxis));
+        repaint();
     }
 }

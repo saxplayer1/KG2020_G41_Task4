@@ -5,11 +5,7 @@
 package kg2019examples_task4threedimensions;
 
 import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import java.awt.event.*;
 import java.util.HashSet;
 import java.util.Set;
 import javax.swing.SwingUtilities;
@@ -24,8 +20,7 @@ import kg2019examples_task4threedimensions.third.Camera;
  *
  * @author Alexey
  */
-public class CameraController implements MouseListener, MouseMotionListener, MouseWheelListener {
-    
+public class CameraController implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener {
     /*=============== Начало паттерна "слушатель" ==================*/
     /* Реализация паттерна слушатель для оповещения всех желающих о каком-либо событии */
     
@@ -116,6 +111,7 @@ public class CameraController implements MouseListener, MouseMotionListener, Mou
     private boolean middleFlag = false;
 
     private boolean rotating = false;
+    private Matrix4Factories.Axis chosenAxis = Matrix4Factories.Axis.Z;
     
     @Override
     public void mousePressed(MouseEvent e) {
@@ -223,5 +219,21 @@ public class CameraController implements MouseListener, MouseMotionListener, Mou
         }
         onRepaint();
     }
-    
+
+    @Override
+    public void keyTyped(KeyEvent keyEvent) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent keyEvent) {
+        if (keyEvent.getKeyCode() == keyEvent.VK_SPACE) {
+
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent keyEvent) {
+
+    }
 }
